@@ -31,11 +31,9 @@ export async function bindExistingPushToToken(token = getToken()) {
 async function registerSW() {
   if (!("serviceWorker" in navigator))
     throw new Error("Service Worker tidak didukung.");
-  let reg = await navigator.serviceWorker.getRegistration("/"); // pakai scope root
+  let reg = await navigator.serviceWorker.getRegistration(); // pakai scope root
   if (!reg) {
-    reg = await navigator.serviceWorker.register("./sw.bundle.js", {
-      scope: "/",
-    });
+    reg = await navigator.serviceWorker.register("./sw.bundle.js");
   }
   try {
     await reg.update();
