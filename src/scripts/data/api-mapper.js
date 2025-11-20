@@ -1,3 +1,3 @@
 export async function reportMapper() {
-  return ('Nama saya : Medwin');
+  return "Nama saya : Medwin";
 }

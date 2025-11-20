@@ -6,10 +6,13 @@ export async function addStoryWithOffline({ description, photo, lat, lon }) {
   if (!token) throw new Error("Harus login dulu");
 
   const payload = { description, photo, lat, lon };
-  
+
   if (!navigator.onLine) {
     await Database.putPendingStory(payload);
-    return { offline: true, message: 'Story disimpan offline dan akan dikirim saat online.' };
+    return {
+      offline: true,
+      message: "Story disimpan offline dan akan dikirim saat online.",
+    };
   }
 
   try {
@@ -17,6 +20,9 @@ export async function addStoryWithOffline({ description, photo, lat, lon }) {
     return { offline: false, ...result };
   } catch (e) {
     await Database.putPendingStory(payload);
-    return { offline: true, message: 'Gagal kirim ke server, disimpan offline dulu.' };
+    return {
+      offline: true,
+      message: "Gagal kirim ke server, disimpan offline dulu.",
+    };
   }
 }

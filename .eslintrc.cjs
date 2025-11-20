@@ -15,6 +15,7 @@ module.exports = {
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'no-undef': 'error',
     'no-console': 'off', // boleh console pas dev
+    'no-empty': ['error', { allowEmptyCatch: true }],
   },
   ignorePatterns: ['dist/**', 'node_modules/**'],
 };

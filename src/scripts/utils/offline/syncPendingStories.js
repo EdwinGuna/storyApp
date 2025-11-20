@@ -27,7 +27,7 @@ export async function syncPendingStories() {
       await Database.removePendingStory(localId);
       console.log("Berhasil sync pending story:", localId);
     } catch (e) {
-        console.error("Gagal sync pending story:", localId, e);
+      console.error("Gagal sync pending story:", localId, e);
     }
   }
 

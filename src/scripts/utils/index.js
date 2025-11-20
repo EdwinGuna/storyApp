@@ -12,19 +12,20 @@ export function sleep(time = 3000) {
 }
 
 export function isServiceWorkerAvailable() {
-  return 'serviceWorker' in navigator;
+  return "serviceWorker" in navigator;
 }
 
-export async function registerServiceWorker(){
+export async function registerServiceWorker() {
   if (!isServiceWorkerAvailable()) {
-    console.log('Service Worker API unsupported');
+    console.log("Service Worker API unsupported");
     return;
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw.bundle.js');
-    console.log('Service worker telah terpasang', registration);
+    const registration =
+      await navigator.serviceWorker.register("./sw.bundle.js");
+    console.log("Service worker telah terpasang", registration);
   } catch (error) {
-    console.log('Failed to install service worker:', error);
+    console.log("Failed to install service worker:", error);
   }
-} 
+}

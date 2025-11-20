@@ -116,9 +116,7 @@ document.addEventListener("click", async (e) => {
     btn.dataset.state = next;
     btn
       .querySelector("span")
-      ?.replaceChildren(
-        next === "on" ? "Unsubscribe" : "Subscribe",
-      );
+      ?.replaceChildren(next === "on" ? "Unsubscribe" : "Subscribe");
     const icon = btn.querySelector("i");
     if (icon)
       icon.className =
@@ -199,8 +197,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   await registerServiceWorker();
-  console.log('Berhasil mendaftarkan service worker.');
-  
+  console.log("Berhasil mendaftarkan service worker.");
+
   window.addEventListener("hashchange", onRouteChange);
 
   await onRouteChange();

@@ -29,15 +29,15 @@ export default class StoryPresenter {
       const result = await (useGuest
         ? this.#model.addStoryAsGuest(data)
         : this.#model.addStory(data));
-      
+
       if (!useGuest && result && result.offline) {
         this.#view.showSuccess(
-          result.message || 
-          "Story disimpan offline dan akan dikirim saat koneksi kembali."
+          result.message ||
+            "Story disimpan offline dan akan dikirim saat koneksi kembali.",
         );
       } else {
         this.#view.showSuccess(
-          result?.message || "Story berhasil ditambahkan!"
+          result?.message || "Story berhasil ditambahkan!",
         );
       }
     } catch (e) {

@@ -1,5 +1,5 @@
-import BookmarkPresenter from './bookmark-presenter';
-import Database from '../../data/database';
+import BookmarkPresenter from "./bookmark-presenter";
+import Database from "../../data/database";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_SERVICE_API_KEY } from "./../../../scripts/config.js";
@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
 
 export default class BookmarkPage {
   #presenter = null;
-   _map;
+  _map;
   _markersGroup;
   _markersById = new Map();
   _cardsById = new Map();
@@ -48,7 +48,7 @@ export default class BookmarkPage {
 
         <div id="story-list" class="story-list" aria-live="polite"></div>
       </section>
-    `;  
+    `;
   }
 
   async afterRender() {
@@ -58,35 +58,35 @@ export default class BookmarkPage {
     });
 
     await this.#presenter.loadStories();
-    
+
     this._ensureMap();
-    
+
     const form = document.getElementById("story-filters");
     form.addEventListener("input", () => this._applyFiltersAndRender());
   }
-    
+
   showLoading() {
     document.querySelector("#story-list").textContent = "Memuat…";
   }
-  
+
   showError(msg) {
     document.querySelector("#story-list").innerHTML =
       `<p role="alert">${msg}</p>`;
   }
-    
+
   showStories(stories) {
     this._allStories = Array.isArray(stories) ? stories : [];
-    
+
     this._ensureMap();
-    
+
     this._applyFiltersAndRender();
   }
-    
+
   // --- method baru: pasang observer & listener sekali saja
   _bindResizeOnce(mapEl) {
     if (this._resizeBound) return;
     this._resizeBound = true;
-    
+
     const refit = (() => {
       let t;
       return () => {
@@ -100,56 +100,56 @@ export default class BookmarkPage {
         }, 100);
       };
     })();
-    
+
     this._mapRO = new ResizeObserver(refit);
     this._mapRO.observe(mapEl);
-    
+
     window.addEventListener("resize", refit);
     window.addEventListener("orientationchange", refit);
-    
+
     requestAnimationFrame(refit);
     setTimeout(refit, 0);
   }
-    
+
   _ensureMap() {
     const KEY = MAP_SERVICE_API_KEY;
     const mapEl = document.querySelector("#story-map");
     if (!mapEl) return;
-    
+
     this._bindResizeOnce(mapEl);
-    
+
     if (this._map && this._map.getContainer?.() === mapEl) {
       this._map.invalidateSize();
       return;
     }
-    
+
     if (this._map) {
       this._map.remove();
       this._map = null;
       this._markersGroup = null;
     }
-    
+
     this._map = L.map(mapEl, {
       center: [-2.5, 118],
       zoom: 5,
       worldCopyJump: true,
     });
-    
+
     this._markersGroup = L.featureGroup().addTo(this._map);
     requestAnimationFrame(() => this._map?.invalidateSize());
-    
+
     const streets =
       KEY &&
       L.tileLayer(
         `https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}${L.Browser.retina ? "@2x" : ""}.png?key=${KEY}`,
-          {
-            attribution: "&copy; OSM, &copy; MapTiler",
-            tileSize: L.Browser.retina ? 512 : 256,
-            zoomOffset: L.Browser.retina ? -1 : 0,
-            maxZoom: 20,
-          },
+        {
+          attribution: "&copy; OSM, &copy; MapTiler",
+          tileSize: L.Browser.retina ? 512 : 256,
+          zoomOffset: L.Browser.retina ? -1 : 0,
+          maxZoom: 20,
+        },
       );
-    
+
     const hybrid =
       KEY &&
       L.tileLayer(
@@ -161,80 +161,80 @@ export default class BookmarkPage {
           maxZoom: 20,
         },
       );
-    
+
     const osm = L.tileLayer(
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          attribution: "&copy; OpenStreetMap contributors",
-          maxZoom: 19,
-        },
-      );
-    
+      {
+        attribution: "&copy; OpenStreetMap contributors",
+        maxZoom: 19,
+      },
+    );
+
     const openTopo = L.tileLayer(
       "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
       {
         attribution:
-        'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | ' +
-        'Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+          'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | ' +
+          'Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
         maxZoom: 17,
         subdomains: "abc",
       },
     );
-    
+
     (streets || osm).addTo(this._map);
-    
+
     const baseLayers = {
       "OSM Standard": osm,
       OpenTopoMap: openTopo,
     };
-    
+
     L.control
       .layers(
         {
           ...(KEY
-          ? { "MapTiler Streets": streets, "MapTiler Hybrid": hybrid }
-          : {}),
+            ? { "MapTiler Streets": streets, "MapTiler Hybrid": hybrid }
+            : {}),
           ...baseLayers,
         },
         null,
         { collapsed: false },
       )
       .addTo(this._map);
-    
-      this._markersGroup = L.featureGroup().addTo(this._map);
-      requestAnimationFrame(() => this._map?.invalidateSize());
+
+    this._markersGroup = L.featureGroup().addTo(this._map);
+    requestAnimationFrame(() => this._map?.invalidateSize());
   }
-    
+
   _applyFiltersAndRender() {
     const q = (document.getElementById("q")?.value || "").trim().toLowerCase();
     const onlyWithLoc = document.getElementById("onlyWithLoc")?.checked;
-    
+
     // filter data
     const filtered = this._allStories.filter((s) => {
       const lat = Number(s.lat ?? s.latitude);
       const lon = Number(s.lon ?? s.lng ?? s.longitude);
       if (onlyWithLoc && !(Number.isFinite(lat) && Number.isFinite(lon)))
-      return false;
-    
+        return false;
+
       const hay = `${s.name ?? ""} ${s.description ?? ""}`.toLowerCase();
       return q ? hay.includes(q) : true;
     });
-    
+
     // render daftar
     this._renderList(filtered);
-    
+
     this._renderMarkers(filtered);
   }
-    
+
   _renderList(stories) {
     const listEl = document.querySelector("#story-list");
     if (!stories.length) {
       listEl.innerHTML = '<p class="muted">Tidak ada story yang cocok.</p>';
       return;
     }
-    
+
     this._cardsById.clear();
-    
+
     const html = stories
       .map((s) => {
         const id = String(s.id);
@@ -254,101 +254,119 @@ export default class BookmarkPage {
         `;
       })
       .join("");
-    
+
     listEl.innerHTML = html;
-    
+
     // cache element → untuk sinkronisasi
     listEl.querySelectorAll(".story-card").forEach((el) => {
       const id = el.getAttribute("data-id");
       this._cardsById.set(id, el);
-    
+
       const activate = () => this._activateById(id, { from: "card" });
       el.addEventListener("mouseenter", activate);
       el.addEventListener("focus", activate);
     });
-    
+
     this._highlightCardIfRequested();
   }
-    
+
   _renderMarkers(stories) {
     // bersihkan marker lama
     if (!this._map || !this._markersGroup) return;
-    
+
     this._markersGroup.clearLayers();
     this._markersById.clear();
-    
+
     const bounds = [];
     stories.forEach((s) => {
       const id = String(s.id);
       const lat = Number(s.lat ?? s.latitude);
       const lon = Number(s.lon ?? s.lng ?? s.longitude);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
-    
+
       const m = L.marker([lat, lon]).addTo(this._markersGroup);
       m.bindPopup(
         `<strong>${this._e(s.name ?? "Tanpa nama")}</strong><br>${this._e(s.description ?? "")}`,
       );
-    
+
       m.on("click", () =>
         this._activateById(id, { from: "marker", pan: false }),
       );
-    
+
       this._markersById.set(id, m);
       bounds.push([lat, lon]);
     });
-    
+
     if (bounds.length) {
       const bb = L.latLngBounds(bounds);
       this._lastBounds = bb; // simpan untuk refit saat resize
       this._map.fitBounds(bb, { padding: [24, 24] });
     }
   }
-    
+
   _highlightCardIfRequested() {
     // Ambil query di belakang hash (contoh: #/stories?focus=ID&hl=1)
-    const hash = location.hash || '';
-    const q = hash.includes('?') ? hash.split('?')[1] : '';
+    const hash = location.hash || "";
+    const q = hash.includes("?") ? hash.split("?")[1] : "";
     const params = new URLSearchParams(q);
-    
-    const hl = params.get('hl');          // '1' atau 'blink'
-    const focus = params.get('focus');    // id kartu (sama dengan data-id)
+
+    const hl = params.get("hl"); // '1' atau 'blink'
+    const focus = params.get("focus"); // id kartu (sama dengan data-id)
     if (!hl) return;
-    
+
     // Cari kartu; fallback ke kontainer list
-    const esc = (s) => (window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/["\\]/g, '\\$&'));
-    const card = focus ? document.querySelector(`.story-card[data-id="${esc(focus)}"]`) : null;
-    const target = card || document.querySelector('.story-card') || document.getElementById('story-list');
-    
+    const esc = (s) =>
+      window.CSS && CSS.escape
+        ? CSS.escape(s)
+        : String(s).replace(/["\\]/g, "\\$&");
+    const card = focus
+      ? document.querySelector(`.story-card[data-id="${esc(focus)}"]`)
+      : null;
+    const target =
+      card ||
+      document.querySelector(".story-card") ||
+      document.getElementById("story-list");
+
     // Scroll ke target
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: card ? 'center' : 'start' });
-    
-    const cls = hl === 'blink' ? 'highlight-blink'
-              : hl === 'pop'   ? 'highlight-pop'
-              : 'highlight-glow';
-      
-    target.classList.remove('highlight-glow','highlight-blink','highlight-pop');
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: card ? "center" : "start",
+    });
+
+    const cls =
+      hl === "blink"
+        ? "highlight-blink"
+        : hl === "pop"
+          ? "highlight-pop"
+          : "highlight-glow";
+
+    target.classList.remove(
+      "highlight-glow",
+      "highlight-blink",
+      "highlight-pop",
+    );
     void target.offsetWidth;
-    
+
     target.classList.add(cls);
     setTimeout(() => target.classList.remove(cls), 10000);
-    
+
     try {
-      const [base] = hash.split('?');
-      history.replaceState({}, '', base);
+      const [base] = hash.split("?");
+      history.replaceState({}, "", base);
     } catch {}
   }
-    
+
   _activateById(id, { pan = true } = {}) {
     const card = this._cardsById.get(id);
     if (card) {
       document
         .querySelectorAll(".story-card--active")
         .forEach((el) => el.classList.remove("story-card--active"));
-        card.classList.add("story-card--active");
-        card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      card.classList.add("story-card--active");
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-    
+
     // highlight marker + popup
     const marker = this._markersById.get(id);
     if (marker) {
@@ -356,7 +374,7 @@ export default class BookmarkPage {
       marker.openPopup();
     }
   }
-    
+
   _e(str) {
     return String(str ?? "")
       .replaceAll("&", "&amp;")

@@ -1,5 +1,4 @@
 import CONFIG from "../config.js";
-import { addStoryWithOffline } from "../utils/offline/addStoryOffline.js";
 import Database from "./database.js";
 
 const ENDPOINTS = {
@@ -59,47 +58,49 @@ export async function getStories(
 }
 
 export async function addStory({ description, photo, lat, lon }) {
-    const token = getToken();
-    if (!token) throw new Error("Harus login dulu");
+  const token = getToken();
+  if (!token) throw new Error("Harus login dulu");
 
-    const draft = { description, photo, lat, lon };
+  const draft = { description, photo, lat, lon };
 
-    if (!navigator.onLine) {
-      await Database.putPendingStory(draft);
-      return {
-        offline: true,
-        message: "Koneksi tidak tersedia. Story disimpan offline dan akan dikirim saat online.",
-      };
-    }
+  if (!navigator.onLine) {
+    await Database.putPendingStory(draft);
+    return {
+      offline: true,
+      message:
+        "Koneksi tidak tersedia. Story disimpan offline dan akan dikirim saat online.",
+    };
+  }
 
-    const formData = new FormData();
-    formData.append("description", description);
-    formData.append("photo", photo);
-    if (lat) formData.append("lat", lat);
-    if (lon) formData.append("lon", lon);
+  const formData = new FormData();
+  formData.append("description", description);
+  formData.append("photo", photo);
+  if (lat) formData.append("lat", lat);
+  if (lon) formData.append("lon", lon);
 
-    try {
-      const res = await fetch(ENDPOINTS.STORIES, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-      const json = await handleJson(res);
+  try {
+    const res = await fetch(ENDPOINTS.STORIES, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+    const json = await handleJson(res);
 
-      return {
-        offline: false,
-        ...json,
-      };
-    } catch (error) {
-      console.error('addStory error, menyimpan ke pending-stories', error);
-      await Database.putPendingStory(draft);
-      
-      return {
-        offline: true,
-        message: 'Story Gagal dikirim ke server(mungkin jaringan bermasalah). Disimpan offline dan akan dikirim ketika online.',
-      };
-    }
-}  
+    return {
+      offline: false,
+      ...json,
+    };
+  } catch (error) {
+    console.error("addStory error, menyimpan ke pending-stories", error);
+    await Database.putPendingStory(draft);
+
+    return {
+      offline: true,
+      message:
+        "Story Gagal dikirim ke server(mungkin jaringan bermasalah). Disimpan offline dan akan dikirim ketika online.",
+    };
+  }
+}
 
 export async function addStoryAsGuest({ description, photo, lat, lon }) {
   const formData = new FormData();

@@ -55,14 +55,6 @@ export default class LoginPage {
     await refreshPushButton();
   }
 
-  updateUserLogin(text) {
-    const userLogin = document.getElementById("user-login");
-    if (userLogin) {
-      userLogin.textContent = text;
-      userLogin.removeAttribute("hidden");
-    }
-  }
-
   navigateTo(hash) {
     location.hash = hash;
   }

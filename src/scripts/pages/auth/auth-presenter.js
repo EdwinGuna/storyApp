@@ -43,14 +43,16 @@ export default class AuthPresenter {
       const token = res?.accessToken || res?.token || res?.loginResult?.token;
 
       if (!token) throw new Error("Token login tidak diketemukan");
+
       saveToken(token);
+
       const { name, email } = res?.loginResult || {};
       const identity = (name && name.trim()) || email || data.email || "User";
-      saveProfile({ name, email: email || data.email });
+      saveProfile({ name: identity, email: email || data.email });
 
       this.#viewLogin.setAuthState(true);
       await this.#viewLogin.refreshAuthUI();
-      this.#viewLogin.updateUserLogin(identity);
+      //this.#viewLogin.updateUserLogin(identity);
 
       this.#viewLogin.showSuccess("Login sukses");
       await sleep();

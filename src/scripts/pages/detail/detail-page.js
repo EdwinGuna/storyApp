@@ -1,7 +1,10 @@
 import { getDetailStory } from "../../data/api.js";
-import { generateSaveStoryButtonTemplate, generateRemoveStoryButtonTemplate } from '../../templates.js';
+import {
+  generateSaveStoryButtonTemplate,
+  generateRemoveStoryButtonTemplate,
+} from "../../templates.js";
 import DetailPresenter from "../detail/detail-presenter.js";
-import Database from '../../data/database.js';
+import Database from "../../data/database.js";
 import L from "leaflet";
 
 export default class DetailPage {
@@ -107,13 +110,15 @@ export default class DetailPage {
   }
 
   renderSaveButton() {
-    document.getElementById('detail-story-save').innerHTML =
+    document.getElementById("detail-story-save").innerHTML =
       generateSaveStoryButtonTemplate();
 
-    document.getElementById('story-detail-save').addEventListener('click', async () => {
-      await this.#presenter.saveStory();
-      await this.#presenter.showSaveButton();
-    });
+    document
+      .getElementById("story-detail-save")
+      .addEventListener("click", async () => {
+        await this.#presenter.saveStory();
+        await this.#presenter.showSaveButton();
+      });
   }
 
   saveToBookmarkSuccessfully(message) {
@@ -125,13 +130,15 @@ export default class DetailPage {
   }
 
   renderRemoveButton() {
-    document.getElementById('detail-story-save').innerHTML =
+    document.getElementById("detail-story-save").innerHTML =
       generateRemoveStoryButtonTemplate();
 
-    document.getElementById('story-detail-remove').addEventListener('click', async () => {
-      await this.#presenter.removeStory();
-      await this.#presenter.showSaveButton();
-    });
+    document
+      .getElementById("story-detail-remove")
+      .addEventListener("click", async () => {
+        await this.#presenter.removeStory();
+        await this.#presenter.showSaveButton();
+      });
   }
 
   removeFromBookmarkSuccessfully(message) {

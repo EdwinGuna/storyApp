@@ -4,7 +4,7 @@
   "scope": "/",
   "name": "Story App",
   "short_name": "StoryApp",
-  "description": "Aplikasi Berbagi Cerita diantara sesama anggota yang sudah subscribe",
+  "description": "Aplikasi Berbagi Cerita diantara sesama anggota yang sudah subscribe maupun tamu",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#d97706",
@@ -48,37 +48,37 @@
   ],
   "screenshots": [
     {
-      "src": "images/screenshots/CityCareApp_001.png",
+      "src": "images/screenshots/StoryApp01.png",
       "sizes": "1920x1043",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "images/screenshots/CityCareApp_002.png",
+      "src": "images/screenshots/StoryApp02.png",
       "sizes": "1920x1043",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "images/screenshots/CityCareApp_003.png",
+      "src": "images/screenshots/StoryApp03.png",
       "sizes": "1920x1043",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "images/screenshots/CityCareApp_004.png",
+      "src": "images/screenshots/StoryApp04.png",
       "sizes": "1080x2280",
       "type": "image/png",
       "form_factor": "narrow"
     },
     {
-      "src": "images/screenshots/CityCareApp_005.png",
+      "src": "images/screenshots/StoryApp05.png",
       "sizes": "1080x2280",
       "type": "image/png",
       "form_factor": "narrow"
     },
     {
-      "src": "images/screenshots/CityCareApp_006.png",
+      "src": "images/screenshots/StoryApp06.png",
       "sizes": "1080x2280",
       "type": "image/png",
       "form_factor": "narrow"

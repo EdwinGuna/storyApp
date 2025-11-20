@@ -7,7 +7,7 @@ import {
   getActivePathname,
 } from "../routes/url-parser";
 
-import { getToken, clearToken, clearProfile } from '../data/api.js';
+import { getToken, clearToken, clearProfile, getProfile } from "../data/api.js";
 
 import {
   generateMainNavigationListTemplate,
@@ -15,22 +15,21 @@ import {
   generateUnauthenticatedNavigationListTemplate,
   generateSubscribeButtonTemplate,
   generateUnsubscribeButtonTemplate,
-} from '../templates'; 
+} from "../templates";
 import { isServiceWorkerAvailable } from "../utils";
 import {
   getPushState,
   enableWebPush,
   disableWebPush,
-  bindExistingPushToToken,
-} from '../notifications.js';
+} from "../notifications.js";
 import { getSavedCount } from "../utils/bookmarks.js";
 
 syncPendingStories().catch(console.error);
 
-/*window.addEventListener("online", () => {
-  console.log("Koneksi kembali online, mencoba sync pending stories...");
+window.addEventListener("online", () => {
+  console.log("Koneksi kembali online, mulai sync pending stories...");
   syncPendingStories().catch(console.error);
-});*/
+});
 
 class App {
   #content = null;
@@ -87,12 +86,12 @@ class App {
     });
   }
 
-   #setupNavigationList() {
-    const navListMain = this.#navigationDrawer.querySelector('#navlist-main');
-    const navList = this.#navigationDrawer.querySelector('#navlist');
+  #setupNavigationList() {
+    const navListMain = this.#navigationDrawer.querySelector("#navlist-main");
+    const navList = this.#navigationDrawer.querySelector("#navlist");
     const savedCount = getSavedCount();
     //const savedCount = typeof BM.getSavedCount === 'function' ? BM.getSavedCount() : 0;
-    
+
     if (!navListMain || !navList) return;
 
     // Selalu render menu utama
@@ -104,15 +103,26 @@ class App {
       ? generateAuthenticatedNavigationListTemplate()
       : generateUnauthenticatedNavigationListTemplate();
 
+    // ⬇️ isi nama user di nav
+    if (isLogin) {
+      const profile = getProfile();
+      const nameEl = this.#navigationDrawer.querySelector(".user-name");
+
+      if (nameEl && profile && Object.keys(profile).length > 0) {
+        nameEl.textContent =
+          (profile.name && profile.name.trim()) || profile.email || "User";
+      }
+    }
+
     // Logout
-    const logoutBtn = document.getElementById('logout-button');
+    const logoutBtn = document.getElementById("logout-button");
     if (logoutBtn) {
-      logoutBtn.addEventListener('click', (ev) => {
+      logoutBtn.addEventListener("click", (ev) => {
         ev.preventDefault();
-        if (confirm('Keluar?')) {
+        if (confirm("Keluar?")) {
           clearToken();
           clearProfile();
-          location.hash = '/login';
+          location.hash = "/login";
           this.#setupNavigationList(); // refresh menu
         }
       });
@@ -121,21 +131,25 @@ class App {
 
   async #setupPushNotification() {
     if (!isServiceWorkerAvailable()) return;
-    
-    const el = document.getElementById('push-notification-tools');
+
+    const el = document.getElementById("push-notification-tools");
     if (!el) return;
 
     const state = await getPushState();
     if (state === "on") {
       el.innerHTML = generateUnsubscribeButtonTemplate();
-      document.getElementById('unsubscribe-button')?.addEventListener('click', () => {
-        disableWebPush().finally(() => this.#setupPushNotification());
-      });
+      document
+        .getElementById("unsubscribe-button")
+        ?.addEventListener("click", () => {
+          disableWebPush().finally(() => this.#setupPushNotification());
+        });
     } else {
       el.innerHTML = generateSubscribeButtonTemplate();
-      document.getElementById('subscribe-button')?.addEventListener('click', () => {
-        enableWebPush().finally(() => this.#setupPushNotification());
-      });
+      document
+        .getElementById("subscribe-button")
+        ?.addEventListener("click", () => {
+          enableWebPush().finally(() => this.#setupPushNotification());
+        });
     }
   }
 

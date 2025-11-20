@@ -58,11 +58,11 @@ main {
 .container {
   padding-inline: 32px;
   margin-inline: auto;
-  max-width: 1300px;
+  max-width: 1500px;
 }
 
 header {
-  height: 90px;
+  height: 100px;
   background:
     radial-gradient(
       60% 50% at 10% -10%,
@@ -78,8 +78,8 @@ header {
 }
 
 .main-header {
-  min-height: 90px;
-  padding-block: 20px;
+  min-height: 100px;
+  padding-block: 10px;
 
   display: flex;
   justify-content: space-between;
@@ -115,23 +115,26 @@ header {
   flex-shrink: 0;
 }
 
-/*.navigation-drawer {
-  min-height: 100vh;
-  width: 200px;
-  padding: 20px 10px;
-  background-color: #fff;
-  position: fixed;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  box-shadow: 0 0 4px 2px #00000033;
-  transform: translateX(-100%);
-  transition: transform 350ms;
-  z-index: 9999;
+#subscribe-button,
+#unsubscribe-button {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid blue;
+  background: #e5e7eb;
+  color: black;
+  transition:
+    filter 0.12s ease,
+    transform 0.12s ease;
 }
 
-.navigation-drawer.open {
-  transform: translateX(0);
-}*/
+#subscribe-button:hover,
+#unsubscribe-button:hover {
+  filter: brightness(1.02);
+  transform: scale(1.1);
+  box-shadow: 0 10px 22px rgba(14, 165, 233, 0.36);  
+}
+
 .navigation-drawer {
   min-height: 100vh;
   width: 100%;
@@ -199,12 +202,25 @@ header {
   gap: 10px 20px;
 }
 
+.navlist-main li,
+.navlist li {
+  display: flex;
+  align-items: center;
+}
+
 .navlist-main li a,
-.navlist li a {
-  padding: 6px 10px;
-  display: block;
-  color: var(--fg);
-  text-decoration: none;
+.navlist li a,
+.navlist li .user-label {
+  padding: 6px 10px;         /* sama seperti li a */
+  display: inline-flex;      /* mirip desktop style li a */
+  align-items: center;
+  gap: 0.5rem;               /* jarak icon & nama */
+  line-height: 1;            /* jangan terlalu tinggi */ 
+}
+
+/* Optional, kalau icon ingin agak rapi */
+.user-label i {
+  font-size: 0.95rem;
 }
 
 .navlist-main li a[aria-current="page"],
@@ -215,8 +231,10 @@ header {
 
 .navlist-main li a:hover,
 .navlist li a:hover {
-  text-decoration: underline;
-  background: rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  background: rgba(14, 165, 233, 0.12);
+  border-radius: 10px;
+  color: var(--fg);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -582,18 +600,6 @@ a:hover {
   line-height: 1.3;
 }
 
-.nav-list [data-auth="user"] {
-  display: none;
-}
-
-.is-auth .nav-list [data-auth="user"] {
-  display: list-item;
-}
-
-.is-auth .nav-list [data-auth="guest"] {
-  display: none;
-}
-
 .skip-link{
   position:fixed; 
   left:12px; 
@@ -710,6 +716,7 @@ a:hover {
     0 2px 8px rgba(0, 0, 0, 0.06);
   padding: clamp(16px, 3.5vw, 28px);
   margin-block: clamp(16px, 4vh, 32px);
+  text-decoration: none;
 }
 
 .about-head {
@@ -797,8 +804,10 @@ a:hover {
 }
 
 .about-lead {
+  /*font-size: 0.9rem;*/
   margin: 0.35rem 0 1rem;
   line-height: 1.65;
+  text-decoration: none;
 }
 
 .about-list {
@@ -1269,34 +1278,23 @@ fieldset.form-row2 > legend{
 }
 
 @media (min-width: 375px) {
-  #story-map { height: 320px }
+  #story-map { height: 300px }
   .story-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 }
 
 /* Tablet: ≥768px → 2 kolom */
 @media (min-width: 768px) {
-  #story-map { height: 360px }
+  #story-map { height: 340px }
   .story-list { grid-template-columns: repeat(3, 1fr); gap: 16px; }
 }
 
 /* Desktop: ≥1024px → 3 kolom (diletakkan SETELAH blok 768px) */
 @media (min-width: 1024px) {
-  #story-map { height: 420px }
+  #story-map { height: 400px }
   .story-list { grid-template-columns: repeat(4, 1fr); 
    gap: 20px; }
 
   .navigation-drawer {
-    /*min-height: auto;
-    width: auto;
-    padding: 0;
-    background-color: transparent;
-
-    flex-direction: row;
-    justify-content: space-between;
-
-    position: static;
-    box-shadow: none;
-    transform: translateX(0);*/
     position: static;           /* bukan off-canvas */
     transform: none;
     box-shadow: none;
@@ -1336,154 +1334,6 @@ fieldset.form-row2 > legend{
   } 
 }
 
-/* Glow halus
-.highlight-glow {
-  position: relative;
-  animation: story-glow 1.2s ease-in-out 0s 3;
-  border-radius: 12px;
-}
-
-@keyframes story-glow {
-  0%,100% { box-shadow: 0 0 0 0 rgba(255, 200, 0, 0); }
-  50%     { box-shadow: 0 0 0 6px rgba(255, 200, 0, .35); }
-}
-
-/* Blink alternatif (kalau mau lebih “nyala”) 
-.highlight-blink {
-  animation: story-blink .65s step-end 6;
-}
-@keyframes story-blink {
-  50% { background-color: rgba(255, 230, 150, .7); }
-}
-
-/* Hormati prefers-reduced-motion 
-@media (prefers-reduced-motion: reduce) {
-  .highlight-glow, .highlight-blink {
-    animation: none;
-    outline: 3px solid rgba(255, 200, 0, .7);
-  }
-}
-
-/* override css daftar story 
-/* Link biasa di kartu, jangan sentuh tombol */
-/*
-#story-list .story-card a:not(.btn){
-  color:#1d4ed8;
-}
-#story-list .story-card a:not(.btn):visited{ color:#1e40af; }
-#story-list .story-card a:not(.btn):hover{
-  color:#1e40af;
-  text-decoration-color:#1e40af;
-}
-
-/* Tombol primary: kunci teks putih di atas bg gelap 
-a.btn.btn--primary,
-a.btn.btn--primary:visited,
-a.btn.btn--primary:hover,
-a.btn.btn--primary:focus,
-a.btn.btn--primary:active,
-button.btn--primary{
-  color:#fff !important;
-  background-color:#0c4a6e !important; /* kontras ~9.46:1 
-  border-color:transparent !important;
-  text-decoration:none !important;
-}*/
-/* ====== GLOW KUAT (default) ====== */
-/*.highlight-glow{
-  position: relative;
-  isolation: isolate;            /* supaya ring tidak terpotong 
-  border-radius: 14px;
-  outline: 2px solid rgba(var(--hl-color), .6);
-  box-shadow:
-    0 6px 24px rgba(var(--hl-color), .25),
-    0 0 0 6px rgba(var(--hl-color), .25);
-  animation: hl-glow 1.1s ease-in-out 0s 3 both;
-  will-change: box-shadow, outline-color, transform;
-  z-index: 1;
-}
-@keyframes hl-glow{
-  0%{
-    transform: translateZ(0) scale(1);
-    outline-color: rgba(var(--hl-color), .0);
-    box-shadow:
-      0 0 0 rgba(0,0,0,0),
-      0 0 0 0 rgba(var(--hl-color), 0);
-  }
-  40%{
-    transform: translateZ(0) scale(1.01);
-    outline-color: rgba(var(--hl-color), .75);
-    box-shadow:
-      0 12px 28px rgba(var(--hl-color), .35),
-      0 0 0 12px rgba(var(--hl-color), .35);
-  }
-  100%{
-    transform: translateZ(0) scale(1);
-    outline-color: rgba(var(--hl-color), .2);
-    box-shadow:
-      0 6px 18px rgba(var(--hl-color), .25),
-      0 0 0 0 rgba(var(--hl-color), 0);
-  }
-}
-
-/* Tambah ring “halo” supaya makin kelihatan 
-.highlight-glow::after{
-  content:"";
-  position:absolute; inset:-8px; border-radius:16px;
-  pointer-events:none;
-  box-shadow: 0 0 0 0 rgba(var(--hl-color), .0);
-  animation: hl-ring 1.1s ease-in-out 0s 3 both;
-  z-index:-1;  /* di bawah konten, di atas background 
-}
-@keyframes hl-ring{
-  0%   { box-shadow: 0 0 0 0 rgba(var(--hl-color), 0); }
-  50%  { box-shadow: 0 0 0 14px rgba(var(--hl-color), .22); }
-  100% { box-shadow: 0 0 0 0 rgba(var(--hl-color), 0); }
-}
-
-/* ====== BLINK TEGAS ====== 
-.highlight-blink{
-  position: relative;
-  border-radius: 12px;
-  animation: hl-blink .55s steps(1, end) 6 both;
-  outline: 3px solid rgba(var(--hl-color), .9);
-}
-@keyframes hl-blink{
-  0%, 100% { background-color: transparent; }
-  50%      { background-color: rgba(var(--hl-bg), .85); }
-}
-
-/* ====== POP (sekali “muncul” + ring) ====== 
-.highlight-pop{
-  position: relative; border-radius: 12px;
-  animation: hl-pop 900ms cubic-bezier(.2,.8,.2,1) 1 both;
-}
-@keyframes hl-pop{
-  0%   { transform: scale(.98); box-shadow: 0 0 0 0 rgba(var(--hl-color), 0); }
-  60%  { transform: scale(1.02);
-         box-shadow: 0 10px 26px rgba(var(--hl-color), .28),
-                     0 0 0 10px rgba(var(--hl-color), .25); }
-  100% { transform: scale(1);   box-shadow: 0 6px 18px rgba(var(--hl-color), .18); }
-}
-
- Kontras tinggi untuk dark mode (opsional) 
-@media (prefers-color-scheme: dark){
-  :root{
-    --hl-bg: 110, 90, 0;
-  }
-}
-
- Hormati prefers-reduced-motion 
-@media (prefers-reduced-motion: reduce){
-  .highlight-glow,
-  .highlight-blink,
-  .highlight-pop,
-  .highlight-glow::after{
-    animation: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    outline: 4px solid rgba(var(--hl-color), .9) !important;
-  }
-}*/
 /* Spesifisitas tinggi agar menang melawan style card lain */
 .story-card.highlight-glow,
 .story-card.highlight-blink,

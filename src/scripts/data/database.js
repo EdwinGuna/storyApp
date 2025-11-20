@@ -7,23 +7,23 @@ const OBJECT_STORE_NAME = "saved-stories";
 const OBJECT_STORE_PENDING = "pending-stories";
 
 const dbPromise = openDB(DATABASE_NAME, DATABASE_VERSION, {
-  upgrade(database, oldVersion ) {
+  upgrade(database) {
     if (!database.objectStoreNames.contains(OBJECT_STORE_NAME)) {
-      database.createObjectStore(OBJECT_STORE_NAME, { keyPath: "id"});
-    } 
+      database.createObjectStore(OBJECT_STORE_NAME, { keyPath: "id" });
+    }
     if (!database.objectStoreNames.contains(OBJECT_STORE_PENDING)) {
-      database.createObjectStore(OBJECT_STORE_PENDING, { 
+      database.createObjectStore(OBJECT_STORE_PENDING, {
         keyPath: "localId",
         autoIncrement: true,
       });
-    } 
+    }
   },
 });
 
 const Database = {
   async putStory(story) {
     if (!Object.hasOwn(story, "id")) {
-      throw new Error('`id` is required to save.');
+      throw new Error("`id` is required to save.");
     }
 
     return (await dbPromise).put(OBJECT_STORE_NAME, story);
@@ -31,7 +31,7 @@ const Database = {
 
   async getStoryById(id) {
     if (!id) {
-      throw new Error('`id` is required.');
+      throw new Error("`id` is required.");
     }
 
     return (await dbPromise).get(OBJECT_STORE_NAME, id);
@@ -59,7 +59,7 @@ const Database = {
 
   async getPendingStoryById(localId) {
     if (!localId) {
-      throw new Error('`localId` is required.');
+      throw new Error("`localId` is required.");
     }
 
     return (await dbPromise).get(OBJECT_STORE_PENDING, localId);

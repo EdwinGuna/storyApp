@@ -232,12 +232,12 @@ export default class HomePage {
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
     // clamp currentPage
-  if (this._currentPage > totalPages) this._currentPage = totalPages;
-  if (this._currentPage < 1) this._currentPage = 1;
+    if (this._currentPage > totalPages) this._currentPage = totalPages;
+    if (this._currentPage < 1) this._currentPage = 1;
 
-  const start = (this._currentPage - 1) * pageSize;
-  const end = start + pageSize;
-  const pageItems = filtered.slice(start, end);
+    const start = (this._currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pageItems = filtered.slice(start, end);
 
     // render daftar
     this._renderList(pageItems);
@@ -326,17 +326,17 @@ export default class HomePage {
 
   _renderPagination(totalPages) {
     const nav = document.getElementById("story-pagination");
-  if (!nav) return;
+    if (!nav) return;
 
-  // kalau cuma 1 halaman dan datanya sedikit, kamu boleh kosongkan pagination
-  if (totalPages <= 1) {
-    nav.innerHTML = "";
-    return;
-  }
+    // kalau cuma 1 halaman dan datanya sedikit, kamu boleh kosongkan pagination
+    if (totalPages <= 1) {
+      nav.innerHTML = "";
+      return;
+    }
 
-  const current = this._currentPage;
+    const current = this._currentPage;
 
-  let html = `
+    let html = `
     <button type="button" class="page-btn" data-page="${current - 1}" ${current === 1 ? "disabled" : ""}>
       &laquo; Prev
     </button>
@@ -346,54 +346,78 @@ export default class HomePage {
     </button>
   `;
 
-  nav.innerHTML = html;
+    nav.innerHTML = html;
 
-  // event handler (delegasi)
-  nav.querySelectorAll(".page-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const targetPage = Number(btn.dataset.page);
-      if (Number.isFinite(targetPage) && targetPage >= 1 && targetPage <= totalPages) {
-        this._currentPage = targetPage;
-        this._applyFiltersAndRender();
-        // optional: scroll ke atas list
-        document.getElementById("stories-title")?.scrollIntoView({ behavior: "smooth" });
-      }
+    // event handler (delegasi)
+    nav.querySelectorAll(".page-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetPage = Number(btn.dataset.page);
+        if (
+          Number.isFinite(targetPage) &&
+          targetPage >= 1 &&
+          targetPage <= totalPages
+        ) {
+          this._currentPage = targetPage;
+          this._applyFiltersAndRender();
+          // optional: scroll ke atas list
+          document
+            .getElementById("stories-title")
+            ?.scrollIntoView({ behavior: "smooth" });
+        }
+      });
     });
-  });  
   }
 
   _highlightCardIfRequested() {
     // Ambil query di belakang hash (contoh: #/stories?focus=ID&hl=1)
-    const hash = location.hash || '';
-    const q = hash.includes('?') ? hash.split('?')[1] : '';
+    const hash = location.hash || "";
+    const q = hash.includes("?") ? hash.split("?")[1] : "";
     const params = new URLSearchParams(q);
 
-    const hl = params.get('hl');          // '1' atau 'blink'
-    const focus = params.get('focus');    // id kartu (sama dengan data-id)
+    const hl = params.get("hl"); // '1' atau 'blink'
+    const focus = params.get("focus"); // id kartu (sama dengan data-id)
     if (!hl) return;
 
     // Cari kartu; fallback ke kontainer list
-    const esc = (s) => (window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/["\\]/g, '\\$&'));
-    const card = focus ? document.querySelector(`.story-card[data-id="${esc(focus)}"]`) : null;
-    const target = card || document.querySelector('.story-card') || document.getElementById('story-list');
+    const esc = (s) =>
+      window.CSS && CSS.escape
+        ? CSS.escape(s)
+        : String(s).replace(/["\\]/g, "\\$&");
+    const card = focus
+      ? document.querySelector(`.story-card[data-id="${esc(focus)}"]`)
+      : null;
+    const target =
+      card ||
+      document.querySelector(".story-card") ||
+      document.getElementById("story-list");
 
     // Scroll ke target
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: card ? 'center' : 'start' });
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: card ? "center" : "start",
+    });
 
-    const cls = hl === 'blink' ? 'highlight-blink'
-              : hl === 'pop'   ? 'highlight-pop'
-              : 'highlight-glow';
-  
-    target.classList.remove('highlight-glow','highlight-blink','highlight-pop');
+    const cls =
+      hl === "blink"
+        ? "highlight-blink"
+        : hl === "pop"
+          ? "highlight-pop"
+          : "highlight-glow";
+
+    target.classList.remove(
+      "highlight-glow",
+      "highlight-blink",
+      "highlight-pop",
+    );
     void target.offsetWidth;
 
     target.classList.add(cls);
     setTimeout(() => target.classList.remove(cls), 10000);
 
     try {
-      const [base] = hash.split('?');
-      history.replaceState({}, '', base);
+      const [base] = hash.split("?");
+      history.replaceState({}, "", base);
     } catch {}
   }
 
