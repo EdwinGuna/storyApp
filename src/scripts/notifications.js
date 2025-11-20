@@ -33,7 +33,7 @@ async function registerSW() {
     throw new Error("Service Worker tidak didukung.");
   let reg = await navigator.serviceWorker.getRegistration("/"); // pakai scope root
   if (!reg) {
-    reg = await navigator.serviceWorker.register("/service_worker.js", {
+    reg = await navigator.serviceWorker.register("./sw.bundle.js", {
       scope: "/",
     });
   }
