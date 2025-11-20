@@ -130,27 +130,50 @@ class App {
   }
 
   async #setupPushNotification() {
-    if (!isServiceWorkerAvailable()) return;
+    if (!isServiceWorkerAvailable()) {
+      console.log("[push] Service Worker tidak tersedia untuk push");
+      return;
+    }
 
     const el = document.getElementById("push-notification-tools");
     if (!el) return;
 
-    const state = await getPushState();
-    if (state === "on") {
+    try {
+      const state = await getPushState();
+      console.log("[push] state:", state);
+
+      if (state === "on") {
       el.innerHTML = generateUnsubscribeButtonTemplate();
       document
         .getElementById("unsubscribe-button")
         ?.addEventListener("click", () => {
-          disableWebPush().finally(() => this.#setupPushNotification());
+          disableWebPush()
+            .catch((err) => console.error("[push] disable error:", err))
+            .finally(() => this.#setupPushNotification());
         });
-    } else {
+      } else {
+        el.innerHTML = generateSubscribeButtonTemplate();
+        document
+          .getElementById("subscribe-button")
+          ?.addEventListener("click", () => {
+            enableWebPush()
+              .catch((err) => console.error("[push] enable error (fallback):", err))
+              .finally(() => this.#setupPushNotification());
+          });
+      }
+    } catch (err) {
+      console.error("[push] getPushState error:", err);
+
+      // fallback: tetap tampilkan tombol Subscribe
       el.innerHTML = generateSubscribeButtonTemplate();
       document
         .getElementById("subscribe-button")
         ?.addEventListener("click", () => {
-          enableWebPush().finally(() => this.#setupPushNotification());
+          enableWebPush()
+            .catch((err) => console.error("[push] enable error (fallback):", err))
+            .finally(() => this.#setupPushNotification());
         });
-    }
+    }  
   }
 
   async renderPage() {
