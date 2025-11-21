@@ -143,21 +143,23 @@ class App {
       console.log("[push] state:", state);
 
       if (state === "on") {
-      el.innerHTML = generateUnsubscribeButtonTemplate();
-      document
-        .getElementById("unsubscribe-button")
-        ?.addEventListener("click", () => {
-          disableWebPush()
-            .catch((err) => console.error("[push] disable error:", err))
-            .finally(() => this.#setupPushNotification());
-        });
+        el.innerHTML = generateUnsubscribeButtonTemplate();
+        document
+          .getElementById("unsubscribe-button")
+          ?.addEventListener("click", () => {
+            disableWebPush()
+              .catch((err) => console.error("[push] disable error:", err))
+              .finally(() => this.#setupPushNotification());
+          });
       } else {
         el.innerHTML = generateSubscribeButtonTemplate();
         document
           .getElementById("subscribe-button")
           ?.addEventListener("click", () => {
             enableWebPush()
-              .catch((err) => console.error("[push] enable error (fallback):", err))
+              .catch((err) =>
+                console.error("[push] enable error (fallback):", err),
+              )
               .finally(() => this.#setupPushNotification());
           });
       }
@@ -170,10 +172,12 @@ class App {
         .getElementById("subscribe-button")
         ?.addEventListener("click", () => {
           enableWebPush()
-            .catch((err) => console.error("[push] enable error (fallback):", err))
+            .catch((err) =>
+              console.error("[push] enable error (fallback):", err),
+            )
             .finally(() => this.#setupPushNotification());
         });
-    }  
+    }
   }
 
   async renderPage() {

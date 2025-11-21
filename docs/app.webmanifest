@@ -6,8 +6,8 @@
   "short_name": "StoryApp",
   "description": "Aplikasi Berbagi Cerita diantara sesama anggota yang sudah subscribe maupun tamu",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#d97706",
+  "background_color": "#f7fafc",
+  "theme_color": "#0c4a6e",
   "icons": [
     {
       "src": "images/icons/icon-x144.png",
@@ -89,7 +89,7 @@
       "name": "cerita Baru",
       "short_name": "Baru",
       "description": "Membuat cerita baru.",
-      "url": "/?source=pwa#/new",
+      "url": "/?source=pwa#/add",
       "icons": [
         {
           "src": "images/icons/add-x512.png",

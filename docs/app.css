@@ -497,6 +497,7 @@ a:hover {
     transform 0.12s ease;
   margin-bottom: 12px;
 }
+
 .backlink:hover {
   filter: brightness(1.02);
   transform: scale(1.1);
@@ -1401,26 +1402,26 @@ fieldset.form-row2 > legend{
   }
 }
 
-.detail-story-save {
+/*.detail-story-save {
   display: grid;
-  grid-template-columns: 1fr auto 1fr; /* kiri | konten | kanan */
+  grid-template-columns: 1fr auto 1fr; 
   align-items: center;
   column-gap: 16px;
   margin-bottom: 6px; 
 }
 
 .action-margin {
-  grid-column: 1;          /* kolom kiri */
-  justify-self: start;     /* rata kiri */
+  grid-column: 1;          
+  justify-self: start;     
   margin: 0; 
 }
 
 #story-detail-save {
-  grid-column: 2;          /* kolom tengah */
-  justify-self: center;    /* pastikan di tengah */
-  font-size: 1.2rem;      /* besarkan teks */
-  padding: 7px 10px;     /* besarkan area klik */
-  min-width: 140px;       /* lebar minimum */
+  grid-column: 2;          
+  justify-self: center;    
+  font-size: 1.2rem;      
+  padding: 7px 10px;    
+  min-width: 140px;       
   min-height: 35px; 
   border-radius: 5px;
   transition:
@@ -1431,11 +1432,11 @@ fieldset.form-row2 > legend{
 }
 
 #story-detail-remove {
-  grid-column: 2;          /* kolom tengah */
-  justify-self: center;    /* pastikan di tengah */
-  font-size: 1.2rem;      /* besarkan teks */
-  padding: 7px 10px;     /* besarkan area klik */
-  min-width: 140px;       /* lebar minimum */
+  grid-column: 2;          
+  justify-self: center;    
+  font-size: 1.2rem;      
+  padding: 7px 10px;     
+  min-width: 140px;       
   min-height: 35px; 
   border-radius: 5px;
   transition:
@@ -1451,6 +1452,106 @@ fieldset.form-row2 > legend{
   filter: brightness(1.02);
   transform: scale(1.1);
   box-shadow: 0 10px 22px rgba(233, 182, 14, 0.36);    
+}*/
+.detail-story-save {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;   /* kiri | tombol | kanan */
+  align-items: center;
+  column-gap: 16px;
+  margin: 14px 0 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background:
+    color-mix(in srgb, var(--primary, #0ea5e9) 4%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--primary, #0ea5e9) 18%, transparent);
+}
+
+/* Label "AKSI" di kiri */
+.action-margin {
+  grid-column: 1;
+  justify-self: start;
+  margin: 0;
+  font-size: .9rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--muted, #374151) 85%, #ffffff 15%);
+}
+
+/* Gaya dasar kedua tombol */
+#story-detail-save,
+#story-detail-remove {
+  grid-column: 2;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+
+  font-size: .95rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  min-width: 150px;
+  min-height: 38px;
+
+  border-radius: 999px;
+  border: 0;
+
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.18);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.16s ease,
+    filter 0.12s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+/* Variasi warna: Save */
+#story-detail-save {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary, #0ea5e9) 80%, #ffffff),
+    color-mix(in srgb, var(--accent1, #0ea5e9) 60%, #ffffff)
+  );
+  color: var(--on-primary, #ffffff);
+}
+
+/* Variasi warna: Remove */
+#story-detail-remove {
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #b91c1c
+  );
+  color: #fef2f2;
+}
+
+/* Hover & active */
+#story-detail-save:hover,
+#story-detail-remove:hover {
+  cursor: pointer;
+  transform: translateY(-1px) scale(1.03);
+  filter: brightness(1.02);
+  box-shadow:
+    0 12px 26px rgba(15, 23, 42, 0.25);
+}
+
+#story-detail-save:active,
+#story-detail-remove:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow:
+    0 6px 14px rgba(15, 23, 42, 0.18);
+}
+
+/* Fokus keyboard yang jelas */
+#story-detail-save:focus-visible,
+#story-detail-remove:focus-visible {
+  outline: 2px solid #fff;
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.8),
+    0 10px 24px rgba(15, 23, 42, 0.24);
 }
 /* required styles */
 
