@@ -7,25 +7,25 @@ export default class RegisterPage {
   async render() {
     return `
       <section class="container auth auth--register">
-        <h2 class="auth__title">Register</h2>
+        <h1 class="auth__title">Register</h1>
 
         <form id="register-form" class="auth-form card" aria-describedby="reg-help" novalidate>
-          <label class="auth-field">
+          <label class="auth-field" for="username">
             <span>Name</span>
             <input id="username" name="name" required autocomplete="name" />
           </label>
 
-          <label class="auth-field">
+          <label class="auth-field" for="email">
             <span>Email</span>
             <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" />
           </label>
 
-          <label class="auth-field">
+          <label class="auth-field" for="password">
             <span>Password</span>
             <input id="password" name="password" type="password" minlength="8" required autocomplete="new-password" />
           </label>
 
-          <label class="auth-field">
+          <label class="auth-field" for="confirm">
             <span>Konfirmasi</span>
             <input id="confirm" name="confirm" type="password" minlength="8" required autocomplete="new-password" />
           </label>
@@ -39,7 +39,7 @@ export default class RegisterPage {
 
         <p class="auth__switch muted">Sudah punya akun? <a href="#/login">Login</a></p>
       </section>
-    `;
+    `;  
   }
 
   async afterRender() {

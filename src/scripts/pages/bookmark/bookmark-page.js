@@ -32,11 +32,12 @@ export default class BookmarkPage {
         <h1 id="stories-title">DAFTAR STORY TERSIMPAN</h1>
 
         <form id="story-filters" class="filters" aria-label="Filter story">
-          <label>
+          <label for="q">
             <span class="visually-hidden">Cari</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
             <input id="q" name="q" type="search" placeholder="Cari nama / deskripsi…" autocomplete="off"/>
           </label>
-          <label>
+          <label for="onlyWithLoc">
             <input id="onlyWithLoc" name="onlyWithLoc" type="checkbox"/>
             Hanya yang punya lokasi
           </label>
@@ -48,7 +49,7 @@ export default class BookmarkPage {
 
         <div id="story-list" class="story-list" aria-live="polite"></div>
       </section>
-    `;
+    `;  
   }
 
   async afterRender() {

@@ -5,10 +5,10 @@ export default class AboutPage {
     return `
       <section class="about-simple container" aria-labelledby="page-title">
         <header class="about-head">
-          <h2 id="page-title" class="about-title">
+          <h1 id="page-title" class="about-title">
             <i class="fa-solid fa-book-open" aria-hidden="true"></i>
             About Application
-          </h2>
+          </h1>
           <p id="about-meta" class="about-meta">
             <i class="fa-solid fa-database" aria-hidden="true"></i>
             Sumber data: <!-- diisi di afterRender -->
@@ -32,7 +32,7 @@ export default class AboutPage {
           dan pola <em>Model-View-Presenter</em> (MVP).
         </p>
       </section>
-    `;
+    `;  
   }
 
   async afterRender() {

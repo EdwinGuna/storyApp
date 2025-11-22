@@ -8,15 +8,15 @@ export default class LoginPage {
   async render() {
     return `
       <section class="container auth auth--login">
-        <h2 class="auth__title">Login</h2>
+        <h1 class="auth__title">Login</h1>
 
         <form id="login-form" class="auth-form card" novalidate>
-          <label class="auth-field">
+          <label class="auth-field" for="email">
             <span>Email</span>
             <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" />
           </label>
 
-          <label class="auth-field">
+          <label class="auth-field" for="password">
             <span>Password</span>
             <input id="password" name="password" type="password" required autocomplete="current-password" />
           </label>
@@ -28,7 +28,7 @@ export default class LoginPage {
 
         <p class="auth__switch muted">Belum punya akun? <a href="#/register">Register</a></p>
       </section>
-    `;
+    `;  
   }
 
   async afterRender() {

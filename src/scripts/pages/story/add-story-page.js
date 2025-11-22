@@ -24,7 +24,7 @@ export default class AddStoryPage {
   async render() {
     return `
       <section class="add-story container" aria-labelledby="add-title">
-        <h2 id="add-title"><i class="fa-solid fa-plus" aria-hidden="true"></i>Tambah Story</h2>
+        <h1 id="add-title"><i class="fa-solid fa-plus" aria-hidden="true"></i>Tambah Story</h1>
 
         <form id="new-story-form" class="card add-form" novalidate>
           <!-- Deskripsi -->
@@ -91,7 +91,7 @@ export default class AddStoryPage {
         </form>
         
       </section>
-    `;
+    `;  
   }
 
   async afterRender() {
